@@ -26,6 +26,14 @@ class TransactionRepository implements TransactionRepositoryInterface
     /**
      * {@inheritDoc}
      */
+    public function findByTransactionNumber(string $transactionNumber): ?Transaction
+    {
+        return Transaction::with('items')->where('transaction_number', $transactionNumber)->first();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function create(array $data): Transaction
     {
         $transaction = Transaction::create([

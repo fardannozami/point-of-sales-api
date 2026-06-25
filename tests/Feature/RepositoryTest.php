@@ -105,8 +105,8 @@ test('transaction repository operations', function () {
     expect($list->total())->toBe(1);
     expect($list->items()[0]->items)->toHaveCount(1);
 
-    // Find By ID
-    $found = $transactionRepository->findById($transaction->id);
+    // Find By Transaction Number
+    $found = $transactionRepository->findByTransactionNumber($transaction->transaction_number);
     expect($found)->not->toBeNull();
     expect($found->transaction_number)->toBe('TRX-20260625-00001');
     expect($found->items)->toHaveCount(1);

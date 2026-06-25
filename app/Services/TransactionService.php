@@ -29,16 +29,16 @@ class TransactionService
     }
 
     /**
-     * Get transaction detail by ID.
+     * Get transaction detail by transaction number.
      *
      * @throws ModelNotFoundException
      */
-    public function getTransactionDetail(int $id): Transaction
+    public function getTransactionDetail(string $transactionNumber): Transaction
     {
-        $transaction = $this->transactionRepository->findById($id);
+        $transaction = $this->transactionRepository->findByTransactionNumber($transactionNumber);
 
         if (! $transaction) {
-            throw (new ModelNotFoundException)->setModel(Transaction::class, [$id]);
+            throw (new ModelNotFoundException)->setModel(Transaction::class, [$transactionNumber]);
         }
 
         return $transaction;

@@ -176,7 +176,7 @@ test('transaction service checkout and stock deduction', function () {
     $list = $transactionService->getTransactionList(10);
     expect($list->total())->toBe(1);
 
-    $detail = $transactionService->getTransactionDetail($transaction->id);
+    $detail = $transactionService->getTransactionDetail($transaction->transaction_number);
     expect($detail->transaction_number)->toBe($transaction->transaction_number);
     expect($detail->items)->toHaveCount(2);
 });

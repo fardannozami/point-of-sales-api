@@ -20,6 +20,11 @@ interface TransactionRepositoryInterface
     public function findById(int $id): ?Transaction;
 
     /**
+     * Find a transaction by transaction number with eager-loaded transaction items.
+     */
+    public function findByTransactionNumber(string $transactionNumber): ?Transaction;
+
+    /**
      * Create a transaction and its items.
      *
      * @param array{

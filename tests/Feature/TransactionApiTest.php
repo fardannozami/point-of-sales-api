@@ -105,13 +105,13 @@ class TransactionApiTest extends TestCase
         $product = Product::factory()->create(['stock' => 10]);
 
         $checkoutResponse = $this->postJson('/api/transactions', ['items' => [['product_id' => $product->id, 'qty' => 1]]]);
-        $transactionId = $checkoutResponse->json('data.id');
+        $transactionNumber = $checkoutResponse->json('data.transaction_number');
 
-        $response = $this->getJson('/api/transactions/'.$transactionId);
+        $response = $this->getJson('/api/transactions/'.$transactionNumber);
 
         $response->assertStatus(200)
             ->assertJsonPath('success', true)
-            ->assertJsonPath('data.id', $transactionId)
+            ->assertJsonPath('data.transaction_number', $transactionNumber)
             ->assertJsonCount(1, 'data.items');
     }
 }

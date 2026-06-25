@@ -15,8 +15,7 @@ class TransactionResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
-            'reference_no' => $this->reference_no,
+            'transaction_number' => $this->transaction_number,
             'total_amount' => (float) $this->total_amount,
             'status' => $this->status,
             'items' => TransactionItemResource::collection($this->whenLoaded('items')),
