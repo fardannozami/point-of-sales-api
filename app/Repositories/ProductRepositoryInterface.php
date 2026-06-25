@@ -25,6 +25,14 @@ interface ProductRepositoryInterface
     public function findById(int $id): ?Product;
 
     /**
+     * Find a product by its ID and lock the row for updates.
+     *
+     * @param int $id
+     * @return Product|null
+     */
+    public function findByIdForUpdate(int $id): ?Product;
+
+    /**
      * Create a new product.
      *
      * @param array{name: string, sku: string, price: float|string, stock: int} $data

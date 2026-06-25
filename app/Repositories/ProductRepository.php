@@ -36,6 +36,14 @@ class ProductRepository implements ProductRepositoryInterface
     /**
      * @inheritDoc
      */
+    public function findByIdForUpdate(int $id): ?Product
+    {
+        return Product::lockForUpdate()->find($id);
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function create(array $data): Product
     {
         return Product::create($data);
