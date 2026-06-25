@@ -31,7 +31,7 @@ class TransactionController extends Controller
 
     public function store(CheckoutRequest $request): JsonResponse
     {
-        $transaction = $this->transactionService->checkout($request->validated()['items']);
+        $transaction = $this->transactionService->checkout($request->validated());
 
         return $this->successResponse(
             new TransactionResource($transaction),
