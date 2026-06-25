@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
-use App\Repositories\ProductRepositoryInterface;
 use App\Models\Product;
+use App\Repositories\ProductRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class ProductService
 {
@@ -16,9 +18,7 @@ class ProductService
     /**
      * Create a new product.
      *
-     * @param array $data
-     * @return Product
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function createProduct(array $data): Product
     {
@@ -36,10 +36,6 @@ class ProductService
 
     /**
      * Get list of products with filters.
-     *
-     * @param array $filters
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
     public function getProductList(array $filters = [], int $perPage = 15): LengthAwarePaginator
     {
@@ -49,16 +45,14 @@ class ProductService
     /**
      * Get details of a single product.
      *
-     * @param int $id
-     * @return Product
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws ModelNotFoundException
      */
     public function getProductDetail(int $id): Product
     {
         $product = $this->productRepository->findById($id);
 
-        if (!$product) {
-            throw (new \Illuminate\Database\Eloquent\ModelNotFoundException())->setModel(Product::class, [$id]);
+        if (! $product) {
+            throw (new ModelNotFoundException)->setModel(Product::class, [$id]);
         }
 
         return $product;
@@ -67,16 +61,13 @@ class ProductService
     /**
      * Update an existing product.
      *
-     * @param int $id
-     * @param array $data
-     * @return Product
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function updateProduct(int $id, array $data): Product
     {
         $rules = [
             'name' => 'sometimes|required|string|max:255',
-            'sku' => 'sometimes|required|string|unique:products,sku,' . $id . '|max:255',
+            'sku' => 'sometimes|required|string|unique:products,sku,'.$id.'|max:255',
             'price' => 'sometimes|required|numeric|min:0',
             'stock' => 'sometimes|required|integer|min:0',
         ];
@@ -88,9 +79,6 @@ class ProductService
 
     /**
      * Delete a product (soft delete).
-     *
-     * @param int $id
-     * @return bool
      */
     public function deleteProduct(int $id): bool
     {

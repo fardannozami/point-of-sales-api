@@ -19,11 +19,11 @@ trait ApiResponse
         // Jika data berbentuk array dan memiliki struktur paginasi bawaan resource
         if (is_array($data) && array_key_exists('data', $data) && array_key_exists('meta', $data)) {
             $response['data'] = $data['data'];
-            
+
             if (array_key_exists('links', $data)) {
                 $response['links'] = $data['links'];
             }
-            
+
             $response['meta'] = $data['meta'];
         } else {
             $response['data'] = $data;
@@ -42,7 +42,7 @@ trait ApiResponse
             'message' => $message,
         ];
 
-        if (!is_null($data)) {
+        if (! is_null($data)) {
             $response['data'] = $data;
         }
 

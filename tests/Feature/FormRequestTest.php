@@ -1,8 +1,8 @@
 <?php
 
+use App\Http\Requests\CheckoutRequest;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Http\Requests\CheckoutRequest;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Validator;
@@ -18,7 +18,7 @@ test('StoreProductRequest rules validate correctly', function () {
         'stock' => 5,
     ]);
 
-    $rules = (new StoreProductRequest())->rules();
+    $rules = (new StoreProductRequest)->rules();
 
     // 1. Valid data
     $validData = [
@@ -80,12 +80,13 @@ test('UpdateProductRequest rules validate correctly', function () {
     ]);
 
     // Instantiation and mock route binding for route('product')
-    $request = new UpdateProductRequest();
-    
+    $request = new UpdateProductRequest;
+
     // Set route parameter using mock route resolver
     $request->setRouteResolver(function () use ($product1) {
         $mockRoute = Mockery::mock();
         $mockRoute->shouldReceive('parameter')->with('product', Mockery::any())->andReturn($product1->id);
+
         return $mockRoute;
     });
 
@@ -134,7 +135,7 @@ test('CheckoutRequest rules validate correctly', function () {
     ]);
     $softDeletedProduct->delete();
 
-    $rules = (new CheckoutRequest())->rules();
+    $rules = (new CheckoutRequest)->rules();
 
     // 1. Valid checkout payload
     $validData = [
@@ -142,8 +143,8 @@ test('CheckoutRequest rules validate correctly', function () {
             [
                 'product_id' => $product->id,
                 'qty' => 2,
-            ]
-        ]
+            ],
+        ],
     ];
     $validator = Validator::make($validData, $rules);
     expect($validator->passes())->toBeTrue();
@@ -154,8 +155,8 @@ test('CheckoutRequest rules validate correctly', function () {
             [
                 'product_id' => $softDeletedProduct->id,
                 'qty' => 1,
-            ]
-        ]
+            ],
+        ],
     ];
     $validator = Validator::make($deletedProductData, $rules);
     expect($validator->passes())->toBeFalse();
@@ -167,8 +168,8 @@ test('CheckoutRequest rules validate correctly', function () {
             [
                 'product_id' => 999,
                 'qty' => 1,
-            ]
-        ]
+            ],
+        ],
     ];
     $validator = Validator::make($nonExistentData, $rules);
     expect($validator->passes())->toBeFalse();
@@ -180,8 +181,8 @@ test('CheckoutRequest rules validate correctly', function () {
             [
                 'product_id' => $product->id,
                 'qty' => 0,
-            ]
-        ]
+            ],
+        ],
     ];
     $validator = Validator::make($invalidQtyData, $rules);
     expect($validator->passes())->toBeFalse();

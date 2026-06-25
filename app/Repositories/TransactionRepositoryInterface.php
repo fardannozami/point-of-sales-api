@@ -10,16 +10,12 @@ interface TransactionRepositoryInterface
     /**
      * Get a paginated list of transactions, eager-loading transaction items.
      *
-     * @param int $perPage
      * @return LengthAwarePaginator<Transaction>
      */
     public function getList(int $perPage = 15): LengthAwarePaginator;
 
     /**
      * Find a transaction by ID with eager-loaded transaction items.
-     *
-     * @param int $id
-     * @return Transaction|null
      */
     public function findById(int $id): ?Transaction;
 
@@ -37,7 +33,6 @@ interface TransactionRepositoryInterface
      *         subtotal: float|string
      *     }>
      * } $data
-     * @return Transaction
      */
     public function create(array $data): Transaction;
 }

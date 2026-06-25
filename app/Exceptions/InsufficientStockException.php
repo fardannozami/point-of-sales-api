@@ -8,7 +8,7 @@ class InsufficientStockException extends Exception
 {
     protected array $errors = [];
 
-    public function __construct(string $message = "Insufficient stock", array $errors = [])
+    public function __construct(string $message = 'Insufficient stock', array $errors = [])
     {
         parent::__construct($message);
         $this->errors = $errors;

@@ -1,20 +1,20 @@
 <?php
 
+use App\Exceptions\InsufficientStockException;
 use App\Models\Product;
 use App\Models\Transaction;
-use App\Services\ProductService;
-use App\Services\TransactionService;
 use App\Repositories\ProductRepository;
 use App\Repositories\TransactionRepository;
-use App\Exceptions\InsufficientStockException;
+use App\Services\ProductService;
+use App\Services\TransactionService;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 uses(RefreshDatabase::class);
 
 test('product service business rules and operations', function () {
-    $productRepo = new ProductRepository();
+    $productRepo = new ProductRepository;
     $service = new ProductService($productRepo);
 
     // 1. Create product with invalid sku (empty)
@@ -90,7 +90,7 @@ test('product service business rules and operations', function () {
     // 7. Delete product
     $deleted = $service->deleteProduct($product->id);
     expect($deleted)->toBeTrue();
-    
+
     // Check soft-deleted item is not found
     try {
         $service->getProductDetail($product->id);
@@ -101,8 +101,8 @@ test('product service business rules and operations', function () {
 });
 
 test('transaction service checkout and stock deduction', function () {
-    $productRepo = new ProductRepository();
-    $transactionRepo = new TransactionRepository();
+    $productRepo = new ProductRepository;
+    $transactionRepo = new TransactionRepository;
     $productService = new ProductService($productRepo);
     $transactionService = new TransactionService($transactionRepo, $productRepo);
 
@@ -126,7 +126,7 @@ test('transaction service checkout and stock deduction', function () {
         'items' => [
             ['product_id' => $p1->id, 'qty' => 2],
             ['product_id' => $p2->id, 'qty' => 1],
-        ]
+        ],
     ];
 
     $transaction = $transactionService->checkout($checkoutData);
@@ -143,7 +143,7 @@ test('transaction service checkout and stock deduction', function () {
     $failData = [
         'items' => [
             ['product_id' => $p2->id, 'qty' => 10], // Requesting 10 but only 4 left
-        ]
+        ],
     ];
 
     try {
@@ -161,8 +161,8 @@ test('transaction service checkout and stock deduction', function () {
     // 3. Checkout with invalid qty (<= 0)
     $invalidQtyData = [
         'items' => [
-            ['product_id' => $p1->id, 'qty' => 0]
-        ]
+            ['product_id' => $p1->id, 'qty' => 0],
+        ],
     ];
 
     try {

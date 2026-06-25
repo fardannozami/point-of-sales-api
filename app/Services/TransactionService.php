@@ -2,15 +2,16 @@
 
 namespace App\Services;
 
-use App\Repositories\TransactionRepositoryInterface;
-use App\Repositories\ProductRepositoryInterface;
-use App\Models\Transaction;
-use App\Models\Product;
 use App\Exceptions\InsufficientStockException;
+use App\Models\Product;
+use App\Models\Transaction;
+use App\Repositories\ProductRepositoryInterface;
+use App\Repositories\TransactionRepositoryInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class TransactionService
 {
@@ -21,9 +22,6 @@ class TransactionService
 
     /**
      * Get a paginated list of transactions.
-     *
-     * @param int $perPage
-     * @return LengthAwarePaginator
      */
     public function getTransactionList(int $perPage = 15): LengthAwarePaginator
     {
@@ -33,16 +31,14 @@ class TransactionService
     /**
      * Get transaction detail by ID.
      *
-     * @param int $id
-     * @return Transaction
-     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+     * @throws ModelNotFoundException
      */
     public function getTransactionDetail(int $id): Transaction
     {
         $transaction = $this->transactionRepository->findById($id);
 
-        if (!$transaction) {
-            throw (new \Illuminate\Database\Eloquent\ModelNotFoundException())->setModel(Transaction::class, [$id]);
+        if (! $transaction) {
+            throw (new ModelNotFoundException)->setModel(Transaction::class, [$id]);
         }
 
         return $transaction;
@@ -51,8 +47,6 @@ class TransactionService
     /**
      * Checkout a transaction.
      *
-     * @param array $data
-     * @return Transaction
      * @throws ValidationException
      * @throws InsufficientStockException
      */
@@ -92,17 +86,18 @@ class TransactionService
                 // 2. Fetch product with row-level lock (SELECT ... FOR UPDATE)
                 $product = $this->productRepository->findByIdForUpdate($productId);
 
-                if (!$product) {
+                if (! $product) {
                     throw ValidationException::withMessages([
-                        "items" => ["Product with ID {$productId} not found."]
+                        'items' => ["Product with ID {$productId} not found."],
                     ]);
                 }
 
                 // 3. Validate stock availability
                 if ($product->stock < $qty) {
                     $insufficientStockErrors[$productId] = [
-                        "Available stock is {$product->stock}"
+                        "Available stock is {$product->stock}",
                     ];
+
                     continue;
                 }
 
@@ -120,8 +115,8 @@ class TransactionService
             }
 
             // If there are any stock validation errors, abort and throw custom exception
-            if (!empty($insufficientStockErrors)) {
-                throw new InsufficientStockException("Insufficient stock", $insufficientStockErrors);
+            if (! empty($insufficientStockErrors)) {
+                throw new InsufficientStockException('Insufficient stock', $insufficientStockErrors);
             }
 
             // 4. Generate transaction number (format: TRX-YYYYMMDD-NNNNN)

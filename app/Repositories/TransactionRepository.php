@@ -8,7 +8,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 class TransactionRepository implements TransactionRepositoryInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getList(int $perPage = 15): LengthAwarePaginator
     {
@@ -16,7 +16,7 @@ class TransactionRepository implements TransactionRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function findById(int $id): ?Transaction
     {
@@ -24,7 +24,7 @@ class TransactionRepository implements TransactionRepositoryInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function create(array $data): Transaction
     {
@@ -33,7 +33,7 @@ class TransactionRepository implements TransactionRepositoryInterface
             'total_amount' => $data['total_amount'],
         ]);
 
-        if (!empty($data['items'])) {
+        if (! empty($data['items'])) {
             foreach ($data['items'] as $item) {
                 $transaction->items()->create([
                     'product_id' => $item['product_id'],

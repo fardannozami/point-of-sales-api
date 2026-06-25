@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 test('product repository CRUD operations and searching', function () {
-    $repository = new ProductRepository();
+    $repository = new ProductRepository;
 
     // 1. Create Product
     $productData = [
@@ -66,8 +66,8 @@ test('product repository CRUD operations and searching', function () {
 });
 
 test('transaction repository operations', function () {
-    $productRepository = new ProductRepository();
-    $transactionRepository = new TransactionRepository();
+    $productRepository = new ProductRepository;
+    $transactionRepository = new TransactionRepository;
 
     // Create a product
     $product = $productRepository->create([
