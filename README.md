@@ -69,15 +69,12 @@ Jika Anda ingin menjalankan aplikasi di dalam kontainer Docker, kami telah menye
     docker compose up -d --build
     ```
     Ini akan mengunduh dan membangun kontainer PHP 8.3-FPM (`app`), Nginx (`web`), dan MySQL 8.0 (`db`).
-3.  **Salin dan Sesuaikan `.env` untuk Docker**
-    Sesuaikan variabel database berikut di dalam file `.env` Anda agar terhubung ke kontainer MySQL (sesuai konfigurasi di `docker-compose.yml`):
-    ```env
-    DB_HOST=db
-    DB_PORT=3306
-    DB_DATABASE=pos_api
-    DB_USERNAME=root
-    DB_PASSWORD=root
+3.  **Salin File Environment**
+    Pastikan file `.env` sudah disalin dari `.env.example`:
+    ```bash
+    cp .env.example .env
     ```
+    *(Catatan: Anda **tidak perlu** mengubah variabel database di file `.env` untuk Docker, karena Docker Compose otomatis meng-override parameter `DB_HOST`, `DB_PORT`, dan `DB_PASSWORD` secara internal).*
 4.  **Jalankan Migrasi Database di dalam Container**
     ```bash
     docker compose exec app php artisan migrate
