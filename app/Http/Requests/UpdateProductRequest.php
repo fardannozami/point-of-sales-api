@@ -25,9 +25,13 @@ class UpdateProductRequest extends FormRequest
         $productId = $this->route('product');
 
         return [
+            /** @example Kopi Susu (Update) */
             'name' => 'sometimes|required|string|max:255',
+            /** @example SKU-001-NEW */
             'sku' => 'sometimes|required|string|unique:products,sku,'.$productId.'|max:255',
+            /** @example 16000 */
             'price' => 'sometimes|required|numeric|min:0',
+            /** @example 150 */
             'stock' => 'sometimes|required|integer|min:0',
         ];
     }

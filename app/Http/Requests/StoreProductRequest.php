@@ -23,9 +23,13 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return [
+            /** @example Kopi Susu */
             'name' => 'required|string|max:255',
+            /** @example SKU-001 */
             'sku' => 'required|string|unique:products,sku|max:255',
+            /** @example 15000 */
             'price' => 'required|numeric|min:0',
+            /** @example 100 */
             'stock' => 'required|integer|min:0',
         ];
     }

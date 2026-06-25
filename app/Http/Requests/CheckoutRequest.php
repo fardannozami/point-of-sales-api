@@ -24,7 +24,9 @@ class CheckoutRequest extends FormRequest
     {
         return [
             'items' => 'required|array|min:1',
+            /** @example 1 */
             'items.*.product_id' => 'required|integer|exists:products,id,deleted_at,NULL',
+            /** @example 2 */
             'items.*.qty' => 'required|integer|min:1',
         ];
     }
