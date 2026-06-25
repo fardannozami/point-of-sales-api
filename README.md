@@ -1,58 +1,145 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Point of Sales (POS) API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi Point of Sales (POS) API sederhana berbasis Laravel 13 untuk mengelola produk dan melakukan checkout transaksi dengan aman.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🛠️ Persyaratan Sistem
+Sebelum memulai, pastikan perangkat Anda memenuhi persyaratan berikut:
+*   PHP `>= 8.3`
+*   Composer
+*   Database Engine (MySQL / MariaDB / PostgreSQL / SQLite)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🚀 Panduan Setup & Instalasi
 
-## Learning Laravel
+Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi secara lokal:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+1.  **Clone Repository**
+    ```bash
+    git clone https://gitlab.com/test9753426/point-of-sales-api.git
+    cd point-of-sales-api
+    ```
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+2.  **Instalasi Dependensi**
+    ```bash
+    composer install
+    ```
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+3.  **Salin File Environment**
+    ```bash
+    cp .env.example .env
+    ```
 
-## Agentic Development
+4.  **Konfigurasi Database**
+    Buka file `.env` yang baru saja disalin dan sesuaikan konfigurasi koneksi database Anda:
+    ```env
+    DB_CONNECTION=mysql
+    DB_HOST=127.0.0.1
+    DB_PORT=3306
+    DB_DATABASE=pos_api
+    DB_USERNAME=root
+    DB_PASSWORD=
+    ```
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+5.  **Generate Application Key**
+    ```bash
+    php artisan key:generate
+    ```
+
+6.  **Jalankan Migrasi Database**
+    ```bash
+    php artisan migrate
+    ```
+
+7.  **Jalankan Server Lokal**
+    ```bash
+    php artisan serve
+    ```
+    Aplikasi kini dapat diakses di `http://127.0.0.1:8000`.
+
+---
+
+## 🧪 Menjalankan Unit & Feature Test
+
+Aplikasi ini dilengkapi dengan pengujian menyeluruh (*automated testing*) menggunakan PHPUnit/Pest. Untuk menjalankan seluruh pengujian:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+php artisan test
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+---
 
-## Contributing
+## 📖 Dokumentasi API
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Seluruh dokumentasi API POS ini didokumentasikan secara otomatis menggunakan **Scramble**.
 
-## Code of Conduct
+Ketika server lokal Anda berjalan (`php artisan serve`), Anda dapat langsung mengakses dokumentasi interaktif (OpenAPI/Swagger UI) dengan membuka tautan ini pada browser:
+👉 **`http://127.0.0.1:8000/`** (Root URL)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### Ringkasan Endpoint
 
-## Security Vulnerabilities
+#### 1. Produk (`/api/products`)
+*   `GET /api/products` - Mendapatkan daftar semua produk (Paginasi tersedia).
+*   `POST /api/products` - Menambahkan produk baru.
+*   `GET /api/products/{id}` - Menampilkan detail produk tertentu.
+*   `PUT /api/products/{id}` - Memperbarui informasi produk.
+*   `DELETE /api/products/{id}` - Menghapus produk secara halus (*Soft Delete*).
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+#### 2. Transaksi (`/api/transactions`)
+*   `GET /api/transactions` - Mendapatkan riwayat daftar transaksi (Paginasi tersedia).
+*   `POST /api/transactions` - Melakukan checkout pembelian beberapa produk sekaligus.
+*   `GET /api/transactions/{id}` - Menampilkan detail transaksi beserta rincian item produk yang dibeli.
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📐 Keputusan Teknis & Arsitektur
+
+Aplikasi ini dirancang dengan mematuhi standar pengembangan modern Laravel dan berfokus pada keandalan data (*data integrity*). Berikut adalah beberapa keputusan teknis utama yang diambil:
+
+### 1. Pola Desain: Repository Pattern & Service Layer
+Untuk memisahkan tanggung jawab kode (*Separation of Concerns*), kami tidak menulis logika bisnis langsung di Controller atau Model.
+*   **Repository Layer (`app/Repositories`)**: Bertanggung jawab penuh atas akses dan query ke database. Membungkus Eloquent ORM sehingga memudahkan jika suatu saat kita ingin mengganti penyimpanan data tanpa merusak logika bisnis.
+*   **Service Layer (`app/Services`)**: Menampung logika bisnis utama (misalnya: memproses detail checkout, validasi stok, menghitung harga total transaksi).
+*   **Controller Layer (`app/Http/Controllers`)**: Hanya berperan menerima HTTP Request, memvalidasi input via *Form Request*, memanggil Service, dan mengembalikan JSON Response via *Resource*.
+
+### 2. Integritas Data Transaksi (Atomic Operations)
+Pada proses checkout, terjadi pembaruan data di beberapa tabel sekaligus (mengurangi stok produk, mencatat transaksi, menyimpan rincian item transaksi). 
+*   Kami membungkus proses ini dalam **Database Transaction (`DB::transaction`)**. 
+*   Apabila salah satu proses gagal (misalnya terjadi kesalahan sistem di tengah jalan atau stok tidak mencukupi untuk salah satu item), maka seluruh operasi yang sempat berjalan akan dibatalkan otomatis (*atomic rollback*), memastikan database tidak berakhir dalam kondisi tidak konsisten (*partial save*).
+
+### 3. Pencegahan Race Condition dengan Pessimistic Locking
+Pada sistem Point of Sales, stok produk sering kali diperebutkan oleh banyak transaksi bersamaan (*concurrent checkout*).
+*   Kami mengimplementasikan **Pessimistic Locking (`lockForUpdate()`)** pada repositori produk ketika melakukan pengecekan stok saat checkout.
+*   Hal ini memastikan baris database produk tersebut "dikunci" untuk sementara hingga transaksi checkout selesai, mencegah terjadinya kesalahan penghitungan stok (*race condition*).
+
+### 4. Custom Exception & Response Consistency
+Semua respons JSON API dirancang seragam melalui Trait `ApiResponse`. Format sukses:
+```json
+{
+  "success": true,
+  "message": "Action successful",
+  "data": { ... }
+}
+```
+Ketika terjadi kegagalan seperti stok tidak mencukupi, aplikasi melempar exception khusus `InsufficientStockException` yang ditangkap secara global di `bootstrap/app.php` dan dikembalikan dalam bentuk respons JSON terstruktur dengan HTTP Code `422 Unprocessable Content`.
+
+### 5. Struktur Respons Paginasi yang Lebih Datar (*Flat Structure*)
+Secara default, Laravel API Resources membungkus data terpaginasi di dalam objek nested `data.data`. Untuk meningkatkan kenyamanan integrasi di sisi klien (*frontend/mobile*), kami melakukan penyesuaian pada `ApiResponse` trait:
+*   Struktur paginasi di-*flatten* (diratakan) sehingga array data produk atau transaksi langsung berada pada *key* utama `data`.
+*   Meta informasi paginasi (`meta`) dan tautan navigasi (`links`) diletakkan sejajar pada root respons JSON bersama `success` dan `message`.
+
+Contoh format respons paginasi:
+```json
+{
+  "success": true,
+  "message": "Success",
+  "data": [
+    { "id": 1, "name": "Kopi Susu", ... }
+  ],
+  "links": { "first": "...", "last": "...", ... },
+  "meta": { "current_page": 1, "from": 1, "last_page": 1, ... }
+}
+```
+
