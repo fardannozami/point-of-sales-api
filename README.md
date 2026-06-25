@@ -59,6 +59,33 @@ Ikuti langkah-langkah di bawah ini untuk menjalankan aplikasi secara lokal:
     ```
     Aplikasi kini dapat diakses di `http://127.0.0.1:8000`.
 
+### 🐳 Alternatif Setup: Menggunakan Docker (Docker Compose)
+
+Jika Anda ingin menjalankan aplikasi di dalam kontainer Docker, kami telah menyediakan konfigurasinya:
+
+1.  **Pastikan Docker & Docker Compose sudah terinstal** di perangkat Anda.
+2.  **Jalankan Container**
+    ```bash
+    docker compose up -d --build
+    ```
+    Ini akan mengunduh dan membangun kontainer PHP 8.3-FPM (`app`), Nginx (`web`), dan MySQL 8.0 (`db`).
+3.  **Salin dan Sesuaikan `.env` untuk Docker**
+    Sesuaikan variabel database berikut di dalam file `.env` Anda agar terhubung ke kontainer MySQL (sesuai konfigurasi di `docker-compose.yml`):
+    ```env
+    DB_HOST=db
+    DB_PORT=3306
+    DB_DATABASE=pos_api
+    DB_USERNAME=root
+    DB_PASSWORD=root
+    ```
+4.  **Jalankan Migrasi Database di dalam Container**
+    ```bash
+    docker compose exec app php artisan migrate
+    ```
+    Setelah semua kontainer menyala, API dan dokumentasi dapat diakses secara lokal di:
+    *   API & Dokumentasi Scramble: **`http://localhost:8080/`**
+    *   OpenAPI JSON: **`http://localhost:8080/api.json`**
+
 ---
 
 ## 🧪 Menjalankan Unit & Feature Test
