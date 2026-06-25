@@ -114,7 +114,7 @@ Ketika server lokal Anda berjalan (`php artisan serve`), Anda dapat langsung men
 #### 2. Transaksi (`/api/transactions`)
 *   `GET /api/transactions` - Mendapatkan riwayat daftar transaksi (Paginasi tersedia).
 *   `POST /api/transactions` - Melakukan checkout pembelian beberapa produk sekaligus.
-*   `GET /api/transactions/{id}` - Menampilkan detail transaksi beserta rincian item produk yang dibeli.
+*   `GET /api/transactions/{transaction_number}` - Menampilkan detail transaksi beserta rincian item produk yang dibeli.
 
 ---
 
@@ -165,5 +165,10 @@ Contoh format respons paginasi:
   "links": { "first": "...", "last": "...", ... },
   "meta": { "current_page": 1, "from": 1, "last_page": 1, ... }
 }
+
+### 6. Keamanan & Abstraksi Data (Penyembunyian ID Database)
+Untuk meningkatkan aspek keamanan API dan mencegah serangan *Insecure Direct Object Reference* (IDOR) serta *enumeration attack*:
+*   **Penggunaan Nomor Transaksi Publik:** Semua akses detail transaksi menggunakan `transaction_number` (misal: `/api/transactions/TRX-20260625-00001`) alih-alih `id` database numerik.
+*   **Penyembunyian ID Internal (`id` & `transaction_id`):** Semua primary key `id` pada entitas transaksi serta primary/foreign key (`id` dan `transaction_id`) pada rincian item transaksi disembunyikan dari respons JSON API melalui Eloquent Resources. Ini memastikan struktur database internal tidak terekspos ke luar.
 ```
 
